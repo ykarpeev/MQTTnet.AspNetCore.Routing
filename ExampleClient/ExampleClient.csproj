@@ -9,4 +9,8 @@
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.0.1.184" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Source\MQTTnet.AspNetCore.Routing.csproj" />
+  </ItemGroup>
+
 </Project>

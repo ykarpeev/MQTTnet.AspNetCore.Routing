@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MQTTnet.AspNetCore.AttributeRouting.Attributes;
 using MQTTnet.AspNetCore.AttributeRouting.Routing;
 using MQTTnet.Server;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MQTTnet.AspNetCore.AttributeRouting
@@ -25,6 +26,24 @@ namespace MQTTnet.AspNetCore.AttributeRouting
         /// Gets the <see cref="MqttServer"/> for the executing action.
         /// </summary>
         public MqttServer Server => ControllerContext.MqttServer;
+
+        public string ClientId => MqttContext.ClientId;
+        public async Task<MqttClientStatus> GetClientStatusAsync()
+        {
+            var clients = await Server.GetClientsAsync();
+            return clients.FirstOrDefault(c => c.Id == MqttContext.ClientId);
+        }
+        public async Task<MqttSessionStatus> GetSessionAsync()
+        {
+            var client = await GetClientStatusAsync();
+            return client?.Session;
+        }
+
+        public async Task<T> GetSessionDataAsync<T>(string key)
+        {
+            var client = await GetClientStatusAsync();
+            return (T)(client?.Session.Items[key]);
+        }
 
         /// <summary>
         /// ControllerContext is set by controller activator. If this class is instantiated directly, it will be null.
