@@ -20,7 +20,7 @@ namespace Example.MqttControllers
 
       
         public string devname { get; set; }
-        [MqttRoute("/")]
+        [MqttRoute()]
         public Task WeatherReport2()
         {
             _logger.LogInformation($"WeatherReport2");
