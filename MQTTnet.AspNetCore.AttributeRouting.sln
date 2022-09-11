@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30406.217
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTnet.AspNetCore.AttributeRouting", "Source\MQTTnet.AspNetCore.AttributeRouting.csproj", "{B1CFA8BF-FEBA-4978-86A6-D052C4C44BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTnet.AspNetCore.Routing", "Source\MQTTnet.AspNetCore.Routing.csproj", "{B1CFA8BF-FEBA-4978-86A6-D052C4C44BA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTnet.AspNetCore.AttributeRouting.Tests", "Tests\MQTTnetA.AspNetCore.AttributeRouting.Tests\MQTTnet.AspNetCore.AttributeRouting.Tests.csproj", "{BF9B933B-6EE0-4CEA-ACAF-DF425DF0B862}"
 EndProject

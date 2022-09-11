@@ -4,11 +4,6 @@
 		<TargetFrameworks>netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
 
 		<IsPackable>false</IsPackable>
-
-		<SignAssembly>true</SignAssembly>
-
-		<AssemblyOriginatorKeyFile>codeSigningKey.pfx</AssemblyOriginatorKeyFile>
-
 		<AssemblyName>MQTTnet.AspNetCore.AttributeRouting.Tests</AssemblyName>
 
 		<RootNamespace>MQTTnet.AspNetCore.AttributeRouting.Tests</RootNamespace>
@@ -31,6 +26,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Source\MQTTnet.AspNetCore.AttributeRouting.csproj" />
+		<ProjectReference Include="..\..\Source\MQTTnet.AspNetCore.Routing.csproj" />
 	</ItemGroup>
 </Project>

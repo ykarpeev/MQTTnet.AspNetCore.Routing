@@ -26,8 +26,13 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+ 
 	</PropertyGroup>
-
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>MQTTnet.AspNetCore.AttributeRouting.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
 	</ItemGroup>
