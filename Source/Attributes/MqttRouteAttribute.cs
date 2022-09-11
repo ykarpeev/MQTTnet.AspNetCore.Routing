@@ -21,7 +21,15 @@ namespace MQTTnet.AspNetCore.AttributeRouting
         {
             Template = template ?? throw new ArgumentNullException(nameof(template));
         }
+        /// <summary>
+        /// Creates a new <see cref="RouteAttribute"/> default route template for controller.
+        ///
+        /// </summary>
+        public MqttRouteAttribute():this("/")
+        {
 
+        }
+        
         /// <summary>
         /// Gets the route template.
         /// </summary>

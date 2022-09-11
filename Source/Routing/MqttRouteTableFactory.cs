@@ -79,8 +79,8 @@ namespace MQTTnet.AspNetCore.AttributeRouting
 
                 // If an action starts with a /, we throw away the inherited portion of the path. We don't process ~/
                 // because it wouldn't make sense in the context of Mqtt routing which has no concept of relative paths.
-                var templates = controllerTemplates.SelectMany((c) => routeAttributes, (c, a) => a[0] == '/' ? a.Substring(1) : $"{c}{a}").ToArray();
-
+                var templates = controllerTemplates.SelectMany((c) => routeAttributes, (c, a) =>  $"{c}{a}").ToArray();
+              
                 templatesByHandler.Add(action, templates);
             }
 
@@ -188,6 +188,14 @@ namespace MQTTnet.AspNetCore.AttributeRouting
 
             if (xTemplate.Segments.Count != y.Template.Segments.Count)
             {
+                if (xTemplate.Segments.Count  ==0 ||  y.Template.Segments.Count==0)
+                {
+                    return -1;
+                }
+                if (xTemplate.Segments.Count == 0 &&  y.Template.Segments.Count == 0)
+                {
+                    return 1;
+                }
                 if (!xTemplate.Segments[xTemplate.Segments.Count - 1].IsCatchAll && yTemplate.Segments[yTemplate.Segments.Count - 1].IsCatchAll)
                 {
                     return -1;
