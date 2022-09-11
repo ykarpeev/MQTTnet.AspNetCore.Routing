@@ -132,6 +132,7 @@ namespace MQTTnet.AspNetCore.AttributeRouting.Routing
                     }
                 }
             }
+ 
         }
 
         private static Task HandlerInvoker(MethodInfo method, object instance, object?[]? parameters)
@@ -173,9 +174,15 @@ namespace MQTTnet.AspNetCore.AttributeRouting.Routing
 
             if (!param.ParameterType.IsAssignableFrom(value.GetType()))
             {
-                throw new ArgumentException($"Cannot assign type \"{value.GetType()}\" to parameter \"{param.ParameterType.Name} {param.Name}\"", param.Name);
+                try
+                {
+                    value = Convert.ChangeType(value, param.ParameterType);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException($"Cannot assign type \"{value.GetType()}\" to parameter \"{param.ParameterType.Name} {param.Name}\"", param.Name,ex);
+                }
             }
-
             return value;
         }
     }

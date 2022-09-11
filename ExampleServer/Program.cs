@@ -24,8 +24,8 @@ namespace Example
                 webBuilder.UseKestrel(
                     o =>
                     {
-                        o.ListenAnyIP(50483, l => l.UseMqtt()); // MQTT pipeline
-                        o.ListenAnyIP(50482); // Default HTTP pipeline
+                        o.ListenAnyIP(1883, l => l.UseMqtt()); // MQTT pipeline
+                        o.ListenAnyIP(5000); // Default HTTP pipeline
                     });
                 webBuilder.ConfigureLogging(opts => opts.AddConsole());
                 webBuilder.UseStartup<Startup>();
