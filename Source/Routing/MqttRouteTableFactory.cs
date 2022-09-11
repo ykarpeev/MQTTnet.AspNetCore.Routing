@@ -109,9 +109,15 @@ namespace MQTTnet.AspNetCore.AttributeRouting
                     var unusedRouteParameterNames = allRouteParameterNames
                         .Except(GetParameterNames(parsedTemplate), StringComparer.OrdinalIgnoreCase)
                         .ToArray();
-
-                    var entry = new MqttRoute(parsedTemplate, keyValuePair.Key, unusedRouteParameterNames);
-
+                    var methodInfo = keyValuePair.Key;
+                    var entry = new MqttRoute(parsedTemplate, methodInfo, unusedRouteParameterNames);
+                    var mrat = methodInfo.DeclaringType.GetCustomAttribute<MqttRouteAttribute>();
+                    if (mrat != null)
+                    {
+                        entry.ControllerTemplate = TemplateParser.ParseTemplate(mrat.Template);
+                        var _haveparams = entry.ControllerTemplate.Segments.Any(c => c.IsParameter);
+                        entry.HaveControllerParameter = _haveparams;
+                    }
                     routes.Add(entry);
                 }
             }

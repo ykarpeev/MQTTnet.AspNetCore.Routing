@@ -31,5 +31,7 @@ namespace MQTTnet.AspNetCore.AttributeRouting
         public MethodInfo Handler { get; set; }
 
         public IReadOnlyDictionary<string, object> Parameters { get; set; }
+        public bool HaveControllerParameter { get; internal set; }
+        public RouteTemplate ControllerTemplate { get; internal set; }
     }
 }

@@ -75,6 +75,21 @@ namespace MQTTnet.AspNetCore.AttributeRouting.Routing
                         })
                         .ToArray();
 
+                     if (routeContext.HaveControllerParameter)
+                    {
+                        var tmpx = routeContext.ControllerTemplate;
+                        tmpx.Segments.Where(p => p.IsParameter).ToList().ForEach(ts =>
+                        {
+                            var pro=declaringType.GetRuntimeProperty(ts.Value);
+                            if (pro != null)
+                            {
+                              if (  routeContext.Parameters.TryGetValue(ts.Value,out object pvalue))
+                                {
+                                    pro.SetValue(classInstance, pvalue);
+                                }
+                            }
+                        });
+                    }
                     if (activateProperties.Length == 0)
                     {
                         logger.LogDebug($"MqttController '{declaringType.FullName}' does not have a property that can accept a controller context.  You may want to add a [{nameof(MqttControllerContextAttribute)}] to a pubilc property.");

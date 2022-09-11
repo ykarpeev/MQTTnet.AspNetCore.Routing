@@ -24,6 +24,8 @@ namespace MQTTnet.AspNetCore.AttributeRouting
         public RouteTemplate Template { get; }
         public string[] UnusedRouteParameterNames { get; }
         public MethodInfo Handler { get; }
+        public RouteTemplate ControllerTemplate { get; internal set; }
+        public bool HaveControllerParameter { get; internal set; }
 
         internal void Match(MqttRouteContext context)
         {
@@ -83,7 +85,7 @@ namespace MQTTnet.AspNetCore.AttributeRouting
 
                 if (!segment.Match(pathSegment, out var matchedParameterValue))
                 {
-                    return;
+                    break;
                 }
                 else
                 {
@@ -128,6 +130,8 @@ namespace MQTTnet.AspNetCore.AttributeRouting
             {
                 context.Parameters = parameters;
                 context.Handler = Handler;
+                context.HaveControllerParameter = HaveControllerParameter;
+                context.ControllerTemplate = ControllerTemplate;
             }
         }
     }
