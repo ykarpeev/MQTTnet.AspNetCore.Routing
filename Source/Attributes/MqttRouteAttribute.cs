@@ -5,7 +5,7 @@
 
 using System;
 
-namespace MQTTnet.AspNetCore.AttributeRouting
+namespace MQTTnet.AspNetCore.Routing
 {
     /// <summary>
     /// Specifies an attribute route on a controller.

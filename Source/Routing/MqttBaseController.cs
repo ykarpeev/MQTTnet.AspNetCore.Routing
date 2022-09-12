@@ -1,20 +1,14 @@
 ﻿// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MQTTnet;
-using MQTTnet.AspNetCore.AttributeRouting;
-using MQTTnet.AspNetCore.AttributeRouting.Attributes;
-using MQTTnet.AspNetCore.AttributeRouting.Routing;
+using MQTTnet.AspNetCore.Routing.Attributes;
 using MQTTnet.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MQTTnet.AspNetCore.AttributeRouting
+namespace MQTTnet.AspNetCore.Routing
 {
     [MqttController]
     public abstract class MqttBaseController

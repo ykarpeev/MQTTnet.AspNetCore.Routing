@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 
-namespace MQTTnet.AspNetCore.AttributeRouting.Routing
+namespace MQTTnet.AspNetCore.Routing
 {
     /// <summary>
     /// Caches <see cref="ObjectFactory"/> instances produced by <see cref="ActivatorUtilities.CreateFactory(Type, Type[])"/>.

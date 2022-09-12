@@ -1,7 +1,7 @@
 ﻿using System;
 using MQTTnet.Server;
 
-namespace MQTTnet.AspNetCore.AttributeRouting.Attributes
+namespace MQTTnet.AspNetCore.Routing.Attributes
 {
     /// <summary>
     /// When creating a custom controller that does not inherit from <see cref="MqttBaseController"/>, this attribute

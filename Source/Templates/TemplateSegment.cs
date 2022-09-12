@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace MQTTnet.AspNetCore.AttributeRouting
+namespace MQTTnet.AspNetCore.Routing
 {
     internal class TemplateSegment : IEquatable<TemplateSegment>
     {

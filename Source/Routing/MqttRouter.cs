@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MQTTnet.AspNetCore.AttributeRouting.Attributes;
+using MQTTnet.AspNetCore.Routing.Attributes;
 using MQTTnet.Server;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 #nullable enable
 
-namespace MQTTnet.AspNetCore.AttributeRouting.Routing
+namespace MQTTnet.AspNetCore.Routing
 {
     internal class MqttRouter
     {

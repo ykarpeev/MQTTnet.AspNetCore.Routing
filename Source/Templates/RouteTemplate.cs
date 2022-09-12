@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace MQTTnet.AspNetCore.AttributeRouting
+namespace MQTTnet.AspNetCore.Routing
 {
     [DebuggerDisplay("{TemplateText}")]
     internal class RouteTemplate : IEquatable<RouteTemplate>

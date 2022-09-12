@@ -2,7 +2,7 @@
 
 using MQTTnet.Server;
 
-namespace MQTTnet.AspNetCore.AttributeRouting.Routing
+namespace MQTTnet.AspNetCore.Routing
 {
     public class MqttControllerContext : IMqttControllerContext
     {

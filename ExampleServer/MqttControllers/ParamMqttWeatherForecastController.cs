@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MQTTnet;
-using MQTTnet.AspNetCore.AttributeRouting;
+using MQTTnet.AspNetCore.Routing;
 using System;
 using System.Threading.Tasks;
 

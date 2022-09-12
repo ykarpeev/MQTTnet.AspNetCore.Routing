@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using MQTTnet.AspNetCore.AttributeRouting;
+using MQTTnet.AspNetCore.Routing;
 using System.Threading.Tasks;
 
 namespace ExampleServer.MqttControllers

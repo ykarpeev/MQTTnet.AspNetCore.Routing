@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MQTTnet.AspNetCore;
-using MQTTnet.AspNetCore.AttributeRouting;
+using MQTTnet.AspNetCore.Routing;
 using MQTTnet.Server;
 
 namespace Example

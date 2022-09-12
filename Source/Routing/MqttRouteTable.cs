@@ -3,7 +3,7 @@
 
 // Modifications Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
-namespace MQTTnet.AspNetCore.AttributeRouting
+namespace MQTTnet.AspNetCore.Routing
 {
     internal class MqttRouteTable
     {
