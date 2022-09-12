@@ -1,5 +1,6 @@
 ﻿[![NuGet Badge](https://buildstats.info/nuget/MQTTnet.AspNetCore.Routing)](https://www.nuget.org/packages/MQTTnet.AspNetCore.Routing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE)
+[![Build status](https://ci.appveyor.com/api/projects/status/7m482221qoqvxq0j/branch/master?svg=true)](https://ci.appveyor.com/project/MaiKeBing/mqttnet-aspnetcore-routing/branch/master)
 
 # MQTTnet AspNetCore Routing
 
