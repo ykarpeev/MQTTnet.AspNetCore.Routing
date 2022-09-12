@@ -1,9 +1,16 @@
 ﻿// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MQTTnet;
+using MQTTnet.AspNetCore.AttributeRouting;
 using MQTTnet.AspNetCore.AttributeRouting.Attributes;
 using MQTTnet.AspNetCore.AttributeRouting.Routing;
 using MQTTnet.Server;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -79,6 +86,16 @@ namespace MQTTnet.AspNetCore.AttributeRouting
         {
             MqttContext.ProcessPublish = false;
             return Task.CompletedTask;
+        }
+
+        public T GetSessionItem<T>(string key)
+        {
+            return (T)MqttContext.SessionItems[key] ;
+        }
+
+        public T GetSessionItem<T>()
+        {
+            return (T)MqttContext.SessionItems[nameof(T)];
         }
     }
 }
