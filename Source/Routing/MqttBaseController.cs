@@ -95,7 +95,7 @@ namespace MQTTnet.AspNetCore.AttributeRouting
 
         public T GetSessionItem<T>()
         {
-            return (T)MqttContext.SessionItems[nameof(T)];
+            return (T)MqttContext.SessionItems[typeof(T).Name];
         }
     }
 }
