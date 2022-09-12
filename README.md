@@ -1,7 +1,9 @@
-﻿[![NuGet Badge](https://buildstats.info/nuget/MQTTnet.AspNetCore.AttributeRouting)](https://www.nuget.org/packages/MQTTnet.AspNetCore.AttributeRouting)
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/LICENSE)
+﻿[![NuGet Badge](https://buildstats.info/nuget/MQTTnet.AspNetCore.Routing)](https://www.nuget.org/packages/MQTTnet.AspNetCore.Routing)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE)
 
-# MQTTnet AspNetCore AttributeRouting
+# MQTTnet AspNetCore Routing
+
+MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting
 
 This addon to MQTTnet provides the ability to define controllers and use attribute-based routing against message topics in a manner that is very similar to AspNet Core.
 
@@ -40,7 +42,7 @@ This library has not been tested against a very high-load environment yet.  Ensu
 
 ## Nuget
 
-This library is available as a nuget package: <https://www.nuget.org/packages/MQTTnet.AspNetCore.AttributeRouting/>
+This library is available as a nuget package: <https://www.nuget.org/packages/MQTTnet.AspNetCore.Routing/>
 
 ## Usage
 
@@ -123,9 +125,9 @@ public class MqttWeatherForecastController : MqttBaseController // Inherit from 
 }
 ```
 
-[See server example project here](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/tree/master/ExampleServer)
+[See server example project here](https://github.com/IoTSharp/MQTTnet.AspNetCore.Routing/tree/master/ExampleServer)
 
-[See client example project here](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/tree/master/ExampleClient)
+[See client example project here](https://github.com/IoTSharp/MQTTnet.AspNetCore.Routing/tree/master/ExampleClient)
 
 ## Contributions
 
