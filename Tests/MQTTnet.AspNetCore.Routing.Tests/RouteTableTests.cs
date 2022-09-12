@@ -54,8 +54,8 @@ namespace MQTTnet.AspNetCore.Routing.Tests
                 "other/route"
             };
 
-            var MockMethod = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Match");
-            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Constructor");
+            var MockMethod = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Match");
+            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Constructor");
             var MockRoutes = new MqttRoute[] {
                 new MqttRoute(
                     new RouteTemplate(routes[0], new List<TemplateSegment>() {
@@ -98,8 +98,8 @@ namespace MQTTnet.AspNetCore.Routing.Tests
                 "other/route"
             };
 
-            var MockMethod = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Match");
-            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Constructor");
+            var MockMethod = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Match");
+            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Constructor");
             var MockRoutes = new MqttRoute[] {
                 new MqttRoute(
                     new RouteTemplate(routes[0], new List<TemplateSegment>() {
@@ -142,8 +142,8 @@ namespace MQTTnet.AspNetCore.Routing.Tests
                 "other/route"
             };
 
-            var MockMethod = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Match");
-            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Constructor");
+            var MockMethod = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Match");
+            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Constructor");
             var MockRoutes = new MqttRoute[] {
                 new MqttRoute(
                     new RouteTemplate(routes[1], new List<TemplateSegment>() {
@@ -186,8 +186,8 @@ namespace MQTTnet.AspNetCore.Routing.Tests
                 "other/route"
             };
 
-            var MockMethod = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Match");
-            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.AttributeRouting.Tests.RouteTableTests").GetMethod("Route_Constructor");
+            var MockMethod = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Match");
+            var MockMethod2 = Type.GetType("MQTTnet.AspNetCore.Routing.Tests.RouteTableTests").GetMethod("Route_Constructor");
             var MockRoutes = new MqttRoute[] {
                 new MqttRoute(
                     new RouteTemplate(routes[0], new List<TemplateSegment>() {

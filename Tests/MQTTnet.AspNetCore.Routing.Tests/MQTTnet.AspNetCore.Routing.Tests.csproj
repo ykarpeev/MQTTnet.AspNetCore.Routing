@@ -6,7 +6,7 @@
 		<IsPackable>false</IsPackable>
 		<AssemblyName>MQTTnet.AspNetCore.Routing.Tests</AssemblyName>
 
-		<RootNamespace>MQTTnet.AspNetCore.AttributeRouting.Tests</RootNamespace>
+		<RootNamespace>MQTTnet.AspNetCore.Routing.Tests</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

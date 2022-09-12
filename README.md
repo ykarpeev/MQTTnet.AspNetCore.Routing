@@ -4,7 +4,7 @@
 
 # MQTTnet AspNetCore Routing
 
-MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting
+MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing
 
 This addon to MQTTnet provides the ability to define controllers and use attribute-based routing against message topics in a manner that is very similar to AspNet Core.
 
@@ -136,7 +136,7 @@ Contributions are welcome.  Please open an issue to discuss your idea prior to s
 
 ## MIT License
 
-See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/LICENSE.
+See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE.
 
 ## About Atlas LiftTech
 
