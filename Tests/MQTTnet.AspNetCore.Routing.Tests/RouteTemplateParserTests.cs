@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MQTTnet.AspNetCore.AttributeRouting.Routing;
+using MQTTnet.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MQTTnet.AspNetCore.AttributeRouting.Tests
+namespace MQTTnet.AspNetCore.Routing.Tests
 {
     [TestClass]
     public class RouteTableTests
