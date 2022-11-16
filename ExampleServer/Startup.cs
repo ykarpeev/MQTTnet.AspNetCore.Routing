@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,10 @@ namespace Example
 
             // Identify and build routes for the current assembly
             services.AddMqttControllers();
+            
+            // Use specific deserialization option for MQTT payload deserialization
+            services.AddMqttDefaultJsonOptions(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            
             services
                 .AddHostedMqttServerWithServices(s =>
                 {
