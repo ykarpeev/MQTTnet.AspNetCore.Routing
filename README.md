@@ -48,43 +48,49 @@ This library is available as a nuget package: <https://www.nuget.org/packages/MQ
 ## Usage
 
 Install this package and MQTTnet from nuget.
+For dotnet CLI: 
+```bash
+dotnet add package MQTTnet.AspNetCore.Routing
+```
 
-Modify your `Startup.cs` with the following options:
+Example configuration on ASP.NET Core 6 MVC Configuration
 
 ```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-	// ... All your other configuration ...
+using MQTTnet.AspNetCore;
+using MQTTnet.AspNetCore.Routing;
 
-	// Identify and build routes
-	services.AddMqttControllers(
-		/*
-			By default, all controllers within the executing assembly are
-			discovered (just pass nothing here). To provide a list of assemblies
-			explicitly, pass an array of Assembly[] here.
-		*/
-	);
+var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(o =>
+    {
+        o.ListenAnyIP(iotaboardMqttSettings.Port, l => l.UseMqtt());
+        o.ListenAnyIP(iotaboardHttpSettings.Port);
+    }
+);
 
-	services
-		.AddHostedMqttServerWithServices(s =>
-		{
-			// Optionally set server options here
-			s.WithoutDefaultEndpoint();
+// Configure MQTTServer service
+builder.Services
+    .AddHostedMqttServerWithServices(o =>
+    {
+        // other configurations
+        o.WithoutDefaultEndpoint();
+    })
+    .AddMqttConnectionHandler()
+    .AddConnections()
+    .AddMqttControllers( // <== NOTICE THIS PART
+    /*
+        By default, all controllers within the executing assembly are
+        discovered (just pass nothing here). To provide a list of assemblies
+        explicitly, pass an array of Assembly[] here.
+    */); 
+    
+var app = builder.Build();
 
-			// Enable Attribute routing
-			s.WithAttributeRouting(
-				/* 
-					By default, messages published to topics that don't
-					match any routes are rejected. Change this to true
-					to allow those messages to be routed without hitting
-					any controller actions.
-				*/
-				allowUnmatchedRoutes: false
-			);
-		})
-		.AddMqttConnectionHandler()
-		.AddConnections();
-}
+app.MapControllers();
+app.UseMqttServer(server => {  
+    // other MqttServer configurations, for example client connect intercepts
+    server.WithAttributeRouting(app.Services, allowUnmatchedRoutes: false);
+});
+app.Run();
 ```
 
 Create your controllers by inheriting from MqttBaseController and adding actions to it like so:
@@ -132,7 +138,7 @@ public class MqttWeatherForecastController : MqttBaseController // Inherit from 
 
 ## Contributions
 
-Contributions are welcome.  Please open an issue to discuss your idea prior to sending a PR.
+Contributions are welcome. Please open an issue to discuss your idea prior to sending a PR.
 
 ## MIT License
 
