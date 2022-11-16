@@ -6,6 +6,7 @@ using MQTTnet.Server;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 // This is needed to make internal classes visible to UnitTesting projects
 [assembly: InternalsVisibleTo("MQTTnet.AspNetCore.Routing.Tests, PublicKey=00240000048000009" +
@@ -35,6 +36,13 @@ namespace MQTTnet.AspNetCore.Routing
             services.AddSingleton<ITypeActivatorCache>(new TypeActivatorCache());
             services.AddSingleton<MqttRouter>();
 
+            return services;
+        }
+
+        public static IServiceCollection AddMqttDefaultJsonOptions(this IServiceCollection services,
+            JsonSerializerOptions options)
+        {
+            services.AddSingleton(new MqttDefaultJsonOptions(options));
             return services;
         }
 
