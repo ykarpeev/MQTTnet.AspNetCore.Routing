@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -122,7 +123,10 @@ namespace MQTTnet.AspNetCore.Routing
 
                         try
                         {
-                            paramArray = parameters.Select(p => MatchParameterOrThrow(p, routeContext.Parameters)).ToArray();
+                            paramArray = parameters.Select(p =>
+                                    MatchParameterOrThrow(p, routeContext.Parameters, controllerContext, svcProvider)
+                                )
+                                .ToArray();
 
                             await HandlerInvoker(routeContext.Handler, classInstance, paramArray).ConfigureAwait(false);
                         }
@@ -174,8 +178,20 @@ namespace MQTTnet.AspNetCore.Routing
             throw new InvalidOperationException($"Unsupported Action return type \"{method.ReturnType}\" on method {method.DeclaringType.FullName}.{method.Name}. Only void and {nameof(Task)} are allowed.");
         }
 
-        private static object? MatchParameterOrThrow(ParameterInfo param, IReadOnlyDictionary<string, object> availableParmeters)
+        private static object? MatchParameterOrThrow(ParameterInfo param,
+            IReadOnlyDictionary<string, object> availableParmeters, MqttControllerContext controllerContext,
+            IServiceProvider serviceProvider)
         {
+            if (param.IsDefined(typeof(FromPayloadAttribute), false))
+            {
+                JsonSerializerOptions? defaultOptions =
+                    serviceProvider.GetService<MqttDefaultJsonOptions>()?.SerializerOptions;
+                return JsonSerializer.Deserialize(controllerContext.MqttContext.ApplicationMessage.Payload,
+                    param.ParameterType,
+                    defaultOptions
+                );
+            }
+
             if (!availableParmeters.TryGetValue(param.Name, out object? value))
             {
                 if (param.IsOptional)
