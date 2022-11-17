@@ -1,10 +1,10 @@
 ﻿[![NuGet Badge](https://buildstats.info/nuget/MQTTnet.AspNetCore.Routing)](https://www.nuget.org/packages/MQTTnet.AspNetCore.Routing)
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/IoTSharp/MQTTnet.AspNetCore.Routing/LICENSE)
 [![Build status](https://ci.appveyor.com/api/projects/status/7m482221qoqvxq0j/branch/master?svg=true)](https://ci.appveyor.com/project/MaiKeBing/mqttnet-aspnetcore-routing/branch/master)
 
 # MQTTnet AspNetCore Routing
 
-MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing
+MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting
 
 This addon to MQTTnet provides the ability to define controllers and use attribute-based routing against message topics in a manner that is very similar to AspNet Core.
 
@@ -165,7 +165,7 @@ Contributions are welcome. Please open an issue to discuss your idea prior to se
 
 ## MIT License
 
-See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE.
+See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/LICENSE.
 
 ## About Atlas LiftTech
 
