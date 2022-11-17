@@ -81,7 +81,13 @@ builder.Services
         By default, all controllers within the executing assembly are
         discovered (just pass nothing here). To provide a list of assemblies
         explicitly, pass an array of Assembly[] here.
-    */); 
+    */)
+    /*
+        optionally, set System.Text.Json serialization default for use with 
+        [FromPayload] in the controllers. We can specify a JsonSerializerOptions
+        or use JsonSerializerDefaults, useful for case-sensitivity or comment-handling
+    */
+    .AddMqttDefaultJsonOptions(new JsonSerializerOptions(JsonSerializerDefaults.Web)); 
     
 var app = builder.Build();
 
@@ -128,6 +134,23 @@ public class MqttWeatherForecastController : MqttBaseController // Inherit from 
 		}
 
 		return Ok();
+	}
+	
+	// Supports binding JSON message payload to parameters with [FromPayload] attribute,
+	// Similar to ASP.NET Core [FromBody]
+	[MqttRoute("{deviceName}/telemetry")]
+	public async Task NewTelemetry(string deviceName, [FromPayload] Telemetry telemetry)
+	{
+	    // here telemetry is JSON-deserialized from message payload to type Telemetry
+		bool success = await DoSomething(telemetry);
+		if (success) {
+		    await Ok();
+		    return;
+		}
+		else {
+		    await BadMessage();
+		    return;
+		}
 	}
 }
 ```
