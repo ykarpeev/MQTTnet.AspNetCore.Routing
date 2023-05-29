@@ -185,7 +185,7 @@ namespace MQTTnet.AspNetCore.Routing
             if (param.IsDefined(typeof(FromPayloadAttribute), false))
             {
                 JsonSerializerOptions? defaultOptions =
-                    serviceProvider.GetService<MqttDefaultJsonOptions>()?.SerializerOptions;
+                    serviceProvider.GetService<MqttRoutingOptions>()?.SerializerOptions;
                 return JsonSerializer.Deserialize(controllerContext.MqttContext.ApplicationMessage.Payload,
                     param.ParameterType,
                     defaultOptions

@@ -1,12 +1,17 @@
 ﻿// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet.AspNetCore.Routing;
+using MQTTnet.AspNetCore.Routing.Routing;
 using MQTTnet.Server;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 
 // This is needed to make internal classes visible to UnitTesting projects
 [assembly: InternalsVisibleTo("MQTTnet.AspNetCore.Routing.Tests, PublicKey=00240000048000009" +
@@ -19,15 +24,31 @@ namespace MQTTnet.AspNetCore.Routing
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Assembly[] fromAssemblies = null)
+        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Assembly[] fromAssemblies)
         {
+            return services.AddMqttControllers(opt => opt.FromAssemblies = fromAssemblies);
+        }
+        public static IServiceCollection AddMqttControllers(this IServiceCollection services)
+        {
+            return services.AddMqttControllers(opt => { });
+        }
+        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Action< MqttRoutingOptions> _options)
+        {
+            var _opt = new MqttRoutingOptions();
+            _opt.WithJsonSerializerOptions();
+            _opt.FromAssemblies = null;
+            _opt.RouteInvocationInterceptor = null;
+            _options?.Invoke( _opt);
+        
+            services.AddSingleton(_opt);
             services.AddSingleton(_ =>
             {
+               
+                var fromAssemblies= _opt.FromAssemblies;
                 if (fromAssemblies != null && fromAssemblies.Length == 0)
                 {
                     throw new ArgumentException("'fromAssemblies' cannot be an empty array. Pass null or a collection of 1 or more assemblies.", nameof(fromAssemblies));
                 }
-
                 var assemblies = fromAssemblies ?? new Assembly[] { Assembly.GetEntryAssembly() };
 
                 return MqttRouteTableFactory.Create(assemblies);
@@ -35,24 +56,91 @@ namespace MQTTnet.AspNetCore.Routing
 
             services.AddSingleton<ITypeActivatorCache>(new TypeActivatorCache());
             services.AddSingleton<MqttRouter>();
-
+            if (_opt.RouteInvocationInterceptor == null)
+            {
+                services.AddSingleton(typeof( IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
+            }
             return services;
         }
+        public static void WithRouteInvocationInterceptor<T>(this MqttRoutingOptions opt) where T : IRouteInvocationInterceptor
+        {
+            opt.RouteInvocationInterceptor = typeof(T);
+        }
+        public static MqttRoutingOptions WithJsonSerializerOptions(this MqttRoutingOptions opt)
+        {
+#if NET5_0_OR_GREATER
+            var jopt = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+#else
+            var jopt = new JsonSerializerOptions();
+            jopt.PropertyNameCaseInsensitive = true;
+#endif
+            jopt.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            opt.SerializerOptions = jopt;
+            return opt;
+        }
 
+        public static MqttRoutingOptions WithJsonSerializerOptions(this MqttRoutingOptions opt, JsonSerializerOptions options)
+        {
+            opt.SerializerOptions = options;
+            return opt;
+        }
+
+
+        [Obsolete("Use 'services.AddMqttControllers(opt => opt.SerializerOptions= new JsonSerializerOptions());' instead ")]
         public static IServiceCollection AddMqttDefaultJsonOptions(this IServiceCollection services,
             JsonSerializerOptions options)
         {
-            services.AddSingleton(new MqttDefaultJsonOptions(options));
+            services.AddSingleton(new MqttRoutingOptions() { SerializerOptions = options });
             return services;
         }
 
+        public static IApplicationBuilder UseAttributeRouting(this IApplicationBuilder app, bool allowUnmatchedRoutes = false)
+        {
+            var router = app.ApplicationServices.GetRequiredService<MqttRouter>();
+            var server = app.ApplicationServices.GetRequiredService<MqttServer>();
+            var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
+            server.InterceptingPublishAsync += async (args) =>
+            {
+                await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                try
+                {
+                    await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
+                }
+                catch (Exception ex)
+                {
+                    await interceptor?.RouteExecuted(args, ex);
+                    if (interceptor == null)
+                    {
+                        throw;
+                    }
+                }
+            };
+            return app;
+        }
+
+        [Obsolete("Use UseAttributeRouting instead")]
         public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, bool allowUnmatchedRoutes = false)
         {
             var router = svcProvider.GetRequiredService<MqttRouter>();
+            var interceptor = svcProvider.GetRequiredService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
+                await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                try
+                {
+                    await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
+                }
+                catch (Exception ex)
+                {
+                    await interceptor?.RouteExecuted(args, ex);
+                    if (interceptor == null)
+                    {
+                        throw;
+                    }
+                }
             };
         }
+
+
     }
 }
