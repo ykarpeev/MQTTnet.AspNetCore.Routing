@@ -1,10 +1,10 @@
 ﻿[![NuGet Badge](https://buildstats.info/nuget/MQTTnet.AspNetCore.Routing)](https://www.nuget.org/packages/MQTTnet.AspNetCore.Routing)
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/IoTSharp/MQTTnet.AspNetCore.Routing/LICENSE)
 [![Build status](https://ci.appveyor.com/api/projects/status/7m482221qoqvxq0j/branch/master?svg=true)](https://ci.appveyor.com/project/MaiKeBing/mqttnet-aspnetcore-routing/branch/master)
 
 # MQTTnet AspNetCore Routing
 
-MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing
+MQTTnet AspNetCore Routing  is a fork of  https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting
 
 This addon to MQTTnet provides the ability to define controllers and use attribute-based routing against message topics in a manner that is very similar to AspNet Core.
 
@@ -81,7 +81,13 @@ builder.Services
         By default, all controllers within the executing assembly are
         discovered (just pass nothing here). To provide a list of assemblies
         explicitly, pass an array of Assembly[] here.
-    */); 
+    */)
+    /*
+        optionally, set System.Text.Json serialization default for use with 
+        [FromPayload] in the controllers. We can specify a JsonSerializerOptions
+        or use JsonSerializerDefaults, useful for case-sensitivity or comment-handling
+    */
+    .AddMqttDefaultJsonOptions(new JsonSerializerOptions(JsonSerializerDefaults.Web)); 
     
 var app = builder.Build();
 
@@ -129,6 +135,23 @@ public class MqttWeatherForecastController : MqttBaseController // Inherit from 
 
 		return Ok();
 	}
+	
+	// Supports binding JSON message payload to parameters with [FromPayload] attribute,
+	// Similar to ASP.NET Core [FromBody]
+	[MqttRoute("{deviceName}/telemetry")]
+	public async Task NewTelemetry(string deviceName, [FromPayload] Telemetry telemetry)
+	{
+	    // here telemetry is JSON-deserialized from message payload to type Telemetry
+		bool success = await DoSomething(telemetry);
+		if (success) {
+		    await Ok();
+		    return;
+		}
+		else {
+		    await BadMessage();
+		    return;
+		}
+	}
 }
 ```
 
@@ -142,7 +165,7 @@ Contributions are welcome. Please open an issue to discuss your idea prior to se
 
 ## MIT License
 
-See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.Routing/LICENSE.
+See https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting/LICENSE.
 
 ## About Atlas LiftTech
 
