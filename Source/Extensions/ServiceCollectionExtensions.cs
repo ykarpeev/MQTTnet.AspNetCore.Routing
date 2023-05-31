@@ -56,7 +56,7 @@ namespace MQTTnet.AspNetCore.Routing
 
             services.AddSingleton<ITypeActivatorCache>(new TypeActivatorCache());
             services.AddSingleton<MqttRouter>();
-            if (_opt.RouteInvocationInterceptor == null)
+            if (_opt.RouteInvocationInterceptor != null)
             {
                 services.AddSingleton(typeof( IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
             }
@@ -101,15 +101,21 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                if (interceptor != null)
+                {
+                    await interceptor.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                }
                 try
                 {
                     await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
                 }
                 catch (Exception ex)
                 {
-                    await interceptor?.RouteExecuted(args, ex);
-                    if (interceptor == null)
+                    if (interceptor != null)
+                    {
+                        await interceptor.RouteExecuted(args, ex);
+                    }
+                    else
                     {
                         throw;
                     }
