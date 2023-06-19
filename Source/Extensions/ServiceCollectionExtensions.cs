@@ -101,13 +101,12 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                if (interceptor != null)
-                {
-                    await interceptor.RouteExecuting(args.ClientId, args.ApplicationMessage);
-                }
                 try
                 {
+                    await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
                     await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
+                    await interceptor?.RouteExecuted(args, null);
+
                 }
                 catch (Exception ex)
                 {
