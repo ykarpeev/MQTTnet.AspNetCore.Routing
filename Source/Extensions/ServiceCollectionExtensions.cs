@@ -32,19 +32,19 @@ namespace MQTTnet.AspNetCore.Routing
         {
             return services.AddMqttControllers(opt => { });
         }
-        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Action< MqttRoutingOptions> _options)
+        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Action<MqttRoutingOptions> _options)
         {
             var _opt = new MqttRoutingOptions();
             _opt.WithJsonSerializerOptions();
             _opt.FromAssemblies = null;
             _opt.RouteInvocationInterceptor = null;
-            _options?.Invoke( _opt);
-        
+            _options?.Invoke(_opt);
+
             services.AddSingleton(_opt);
             services.AddSingleton(_ =>
             {
-               
-                var fromAssemblies= _opt.FromAssemblies;
+
+                var fromAssemblies = _opt.FromAssemblies;
                 if (fromAssemblies != null && fromAssemblies.Length == 0)
                 {
                     throw new ArgumentException("'fromAssemblies' cannot be an empty array. Pass null or a collection of 1 or more assemblies.", nameof(fromAssemblies));
@@ -58,7 +58,7 @@ namespace MQTTnet.AspNetCore.Routing
             services.AddSingleton<MqttRouter>();
             if (_opt.RouteInvocationInterceptor != null)
             {
-                services.AddSingleton(typeof( IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
+                services.AddSingleton(typeof(IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
             }
             return services;
         }
@@ -103,10 +103,17 @@ namespace MQTTnet.AspNetCore.Routing
             {
                 try
                 {
-                    await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
-                    await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
-                    await interceptor?.RouteExecuted(args, null);
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                    }
 
+                    await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
+
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(args, null);
+                    }
                 }
                 catch (Exception ex)
                 {
