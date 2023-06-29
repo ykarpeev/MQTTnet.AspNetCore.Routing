@@ -1,4 +1,4 @@
-﻿// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
+// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -101,30 +101,28 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
+                object correlationObject = null;
+                if (interceptor != null)
+                {
+                    correlationObject = await interceptor.RouteExecuting(args);
+                }
+
                 try
                 {
-                    if (interceptor != null)
-                    {
-                        await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
-                    }
-
                     await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
 
                     if (interceptor != null)
                     {
-                        await interceptor?.RouteExecuted(args, null);
+                        await interceptor?.RouteExecuted(correlationObject, args, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     if (interceptor != null)
                     {
-                        await interceptor.RouteExecuted(args, ex);
+                        await interceptor?.RouteExecuted(correlationObject, args, ex);
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
             };
             return app;
@@ -137,22 +135,29 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = svcProvider.GetRequiredService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                await interceptor?.RouteExecuting(args.ClientId, args.ApplicationMessage);
+                object correlationObject = null;
+                if (interceptor != null)
+                {
+                    correlationObject = await interceptor.RouteExecuting( args );
+                }
+
                 try
                 {
                     await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
-                }
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(correlationObject, args, null);
+                    }
+                } 
                 catch (Exception ex)
                 {
-                    await interceptor?.RouteExecuted(args, ex);
-                    if (interceptor == null)
+                    if (interceptor != null)
                     {
-                        throw;
+                        await interceptor?.RouteExecuted(correlationObject, args, ex);
                     }
+                    throw;
                 }
             };
         }
-
-
     }
 }
