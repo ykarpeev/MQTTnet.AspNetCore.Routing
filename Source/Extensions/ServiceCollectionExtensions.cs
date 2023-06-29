@@ -113,14 +113,14 @@ namespace MQTTnet.AspNetCore.Routing
 
                     if (interceptor != null)
                     {
-                        await interceptor?.RouteExecuted(correlationObject, args, null);
+                        await interceptor.RouteExecuted(correlationObject, args, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     if (interceptor != null)
                     {
-                        await interceptor?.RouteExecuted(correlationObject, args, ex);
+                        await interceptor.RouteExecuted(correlationObject, args, ex);
                     }
                     throw;
                 }
@@ -146,14 +146,14 @@ namespace MQTTnet.AspNetCore.Routing
                     await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
                     if (interceptor != null)
                     {
-                        await interceptor?.RouteExecuted(correlationObject, args, null);
+                        await interceptor.RouteExecuted(correlationObject, args, null);
                     }
                 } 
                 catch (Exception ex)
                 {
                     if (interceptor != null)
                     {
-                        await interceptor?.RouteExecuted(correlationObject, args, ex);
+                        await interceptor.RouteExecuted(correlationObject, args, ex);
                     }
                     throw;
                 }
