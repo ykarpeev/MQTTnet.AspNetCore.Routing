@@ -1,4 +1,4 @@
-﻿// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
+// Copyright (c) Atlas Lift Tech Inc. All rights reserved.
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -32,19 +32,19 @@ namespace MQTTnet.AspNetCore.Routing
         {
             return services.AddMqttControllers(opt => { });
         }
-        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Action< MqttRoutingOptions> _options)
+        public static IServiceCollection AddMqttControllers(this IServiceCollection services, Action<MqttRoutingOptions> _options)
         {
             var _opt = new MqttRoutingOptions();
             _opt.WithJsonSerializerOptions();
             _opt.FromAssemblies = null;
             _opt.RouteInvocationInterceptor = null;
-            _options?.Invoke( _opt);
-        
+            _options?.Invoke(_opt);
+
             services.AddSingleton(_opt);
             services.AddSingleton(_ =>
             {
-               
-                var fromAssemblies= _opt.FromAssemblies;
+
+                var fromAssemblies = _opt.FromAssemblies;
                 if (fromAssemblies != null && fromAssemblies.Length == 0)
                 {
                     throw new ArgumentException("'fromAssemblies' cannot be an empty array. Pass null or a collection of 1 or more assemblies.", nameof(fromAssemblies));
@@ -58,7 +58,7 @@ namespace MQTTnet.AspNetCore.Routing
             services.AddSingleton<MqttRouter>();
             if (_opt.RouteInvocationInterceptor != null)
             {
-                services.AddSingleton(typeof( IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
+                services.AddSingleton(typeof(IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
             }
             return services;
         }
@@ -101,15 +101,27 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                var correlationObject = await interceptor?.RouteExecuting(args);
+                object correlationObject = null;
+                if (interceptor != null)
+                {
+                    correlationObject = await interceptor.RouteExecuting(args);
+                }
 
-                try {
+                try
+                {
                     await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
-                    await interceptor?.RouteExecuted(correlationObject, args, null);
+
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(correlationObject, args, null);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    await interceptor?.RouteExecuted(correlationObject, args, ex);
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(correlationObject, args, ex);
+                    }
                     throw;
                 }
             };
@@ -123,15 +135,26 @@ namespace MQTTnet.AspNetCore.Routing
             var interceptor = svcProvider.GetRequiredService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
-                var correlationObject = await interceptor?.RouteExecuting( args );
+                object correlationObject = null;
+                if (interceptor != null)
+                {
+                    correlationObject = await interceptor.RouteExecuting( args );
+                }
+
                 try
                 {
                     await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
-                    await interceptor?.RouteExecuted( correlationObject, args, null );
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(correlationObject, args, null);
+                    }
                 } 
                 catch (Exception ex)
                 {
-                    await interceptor?.RouteExecuted( correlationObject, args, ex );
+                    if (interceptor != null)
+                    {
+                        await interceptor?.RouteExecuted(correlationObject, args, ex);
+                    }
                     throw;
                 }
             };
