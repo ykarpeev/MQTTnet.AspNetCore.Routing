@@ -98,6 +98,7 @@ namespace MQTTnet.AspNetCore.Routing
         {
             var router = app.ApplicationServices.GetRequiredService<MqttRouter>();
             var server = app.ApplicationServices.GetRequiredService<MqttServer>();
+            router.Server = server;
             var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
@@ -128,10 +129,10 @@ namespace MQTTnet.AspNetCore.Routing
             return app;
         }
 
-        [Obsolete("Use UseAttributeRouting instead")]
         public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, bool allowUnmatchedRoutes = false)
         {
             var router = svcProvider.GetRequiredService<MqttRouter>();
+            router.Server = server;
             var interceptor = svcProvider.GetRequiredService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
