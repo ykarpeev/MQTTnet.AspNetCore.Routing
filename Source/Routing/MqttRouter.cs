@@ -21,7 +21,7 @@ namespace MQTTnet.AspNetCore.Routing
         private readonly MqttRouteTable routeTable;
         private readonly ITypeActivatorCache typeActivator;
 
-        public MqttServer Server { get; set; }
+        public MqttServer? Server { get; set; }
 
         public MqttRouter(ILogger<MqttRouter> logger, MqttRouteTable routeTable, ITypeActivatorCache typeActivator)
         {

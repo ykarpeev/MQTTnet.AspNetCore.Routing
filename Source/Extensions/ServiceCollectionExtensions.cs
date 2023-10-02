@@ -53,9 +53,9 @@ namespace MQTTnet.AspNetCore.Routing
 
                 return MqttRouteTableFactory.Create(assemblies);
             });
-
+            
             services.AddSingleton<ITypeActivatorCache>(new TypeActivatorCache());
-            services.AddSingleton<MqttRouter>();
+            services.AddTransient<MqttRouter>();
             if (_opt.RouteInvocationInterceptor != null)
             {
                 services.AddSingleton(typeof(IRouteInvocationInterceptor), _opt.RouteInvocationInterceptor);
@@ -133,7 +133,7 @@ namespace MQTTnet.AspNetCore.Routing
         {
             var router = svcProvider.GetRequiredService<MqttRouter>();
             router.Server = server;
-            var interceptor = svcProvider.GetRequiredService<IRouteInvocationInterceptor>();
+            var interceptor = svcProvider.GetService<IRouteInvocationInterceptor>();
             server.InterceptingPublishAsync += async (args) =>
             {
                 object correlationObject = null;
