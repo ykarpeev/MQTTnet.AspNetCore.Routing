@@ -32,7 +32,7 @@ This library has not been tested against a very high-load environment yet.  Ensu
 
 ## Supported frameworks
 
-* .NET Standard 2.0+
+
 * .NET Core 3.1+
 
 ## Supported MQTT versions

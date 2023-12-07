@@ -17,7 +17,7 @@ namespace ExampleClient
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
                 .WithClientOptions(new MqttClientOptionsBuilder()
                     .WithClientId($"Client{rnd.Next(0, 1000)}")
-                    .WithWebSocketServer("localhost:50482/mqtt")
+                    .WithWebSocketServer( cfg=> cfg.WithUri("localhost:50482/mqtt"))
                     .Build())
                 .Build();
 
@@ -38,7 +38,7 @@ namespace ExampleClient
 
             mqttClient.ApplicationMessageReceivedAsync += e =>
             {
-                Console.WriteLine($"Message from {e.ClientId}: {e.ApplicationMessage.Payload.Length} bytes.");
+                Console.WriteLine($"Message from {e.ClientId}: {e.ApplicationMessage.PayloadSegment.Count } bytes.");
                 return System.Threading.Tasks.Task.CompletedTask;
             };
 
