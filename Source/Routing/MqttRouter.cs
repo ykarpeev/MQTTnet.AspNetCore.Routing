@@ -21,6 +21,8 @@ namespace MQTTnet.AspNetCore.Routing
         private readonly MqttRouteTable routeTable;
         private readonly ITypeActivatorCache typeActivator;
 
+        public MqttServer? Server { get; set; }
+
         public MqttRouter(ILogger<MqttRouter> logger, MqttRouteTable routeTable, ITypeActivatorCache typeActivator)
         {
             this.logger = logger;
@@ -76,7 +78,6 @@ namespace MQTTnet.AspNetCore.Routing
                         })
                         .ToArray();
 
-                
                     if (activateProperties.Length == 0)
                     {
                         logger.LogDebug($"MqttController '{declaringType.FullName}' does not have a property that can accept a controller context.  You may want to add a [{nameof(MqttControllerContextAttribute)}] to a pubilc property.");
@@ -85,7 +86,7 @@ namespace MQTTnet.AspNetCore.Routing
                     var controllerContext = new MqttControllerContext()
                     {
                         MqttContext = context,
-                        MqttServer = scope.ServiceProvider.GetRequiredService<MqttServer>()
+                        MqttServer = Server
                     };
 
                     for (int i = 0; i < activateProperties.Length; i++)
@@ -152,7 +153,6 @@ namespace MQTTnet.AspNetCore.Routing
                     }
                 }
             }
- 
         }
 
         private static Task HandlerInvoker(MethodInfo method, object instance, object?[]? parameters)
