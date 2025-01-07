@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using MQTTnet.AspNetCore.Routing.Attributes;
 using MQTTnet.Server;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -186,7 +188,7 @@ namespace MQTTnet.AspNetCore.Routing
             {
                 JsonSerializerOptions? defaultOptions =
                     serviceProvider.GetService<MqttRoutingOptions>()?.SerializerOptions;
-                return JsonSerializer.Deserialize(controllerContext.MqttContext.ApplicationMessage.Payload,
+                return JsonSerializer.Deserialize(new MemoryStream(controllerContext.MqttContext.ApplicationMessage.Payload.ToArray()),
                     param.ParameterType,
                     defaultOptions
                 );
