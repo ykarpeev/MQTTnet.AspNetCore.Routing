@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>
 			This is a support library to integrate AttributeRouting into MQTTnet with AspNetCore.
@@ -26,6 +25,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<TargetFrameworks>net9.0;net8.0</TargetFrameworks>
  
 	</PropertyGroup>
 	<ItemGroup>
@@ -33,14 +33,10 @@
 			<_Parameter1>MQTTnet.AspNetCore.Routing.Tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
- 
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MQTTnet" Version="4.3.2.930" />
-		<PackageReference Include="MQTTnet.AspNetCore" Version="4.3.2.930" />
+		<PackageReference Include="MQTTnet" Version="5.0.1.1416" />
+		<PackageReference Include="MQTTnet.AspNetCore" Version="5.0.1.1416" />
 	</ItemGroup>
 </Project>

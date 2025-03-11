@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MQTTnet.AspNetCore.Routing.Attributes;
 using MQTTnet.Server;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -186,13 +187,13 @@ namespace MQTTnet.AspNetCore.Routing
             {
                 JsonSerializerOptions? defaultOptions =
                     serviceProvider.GetService<MqttRoutingOptions>()?.SerializerOptions;
-                return JsonSerializer.Deserialize(controllerContext.MqttContext.ApplicationMessage.Payload,
+                return JsonSerializer.Deserialize(new ReadOnlySpan<byte>(controllerContext.MqttContext.ApplicationMessage.Payload.ToArray()),
                     param.ParameterType,
                     defaultOptions
                 );
             }
-
-            if (!availableParmeters.TryGetValue(param.Name, out object? value))
+            object? value = null;
+            if (param?.Name!=null &&  !availableParmeters.TryGetValue(param.Name, out   value))
             {
                 if (param.IsOptional)
                 {
@@ -204,7 +205,7 @@ namespace MQTTnet.AspNetCore.Routing
                 }
             }
 
-            if (!param.ParameterType.IsAssignableFrom(value.GetType()))
+            if (value !=null && param!=null && !param.ParameterType.IsAssignableFrom(value.GetType()))
             {
                 try
                 {
