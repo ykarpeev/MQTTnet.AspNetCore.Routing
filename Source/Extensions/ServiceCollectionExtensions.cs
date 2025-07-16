@@ -103,12 +103,16 @@ namespace MQTTnet.AspNetCore.Routing
 
         public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, bool allowUnmatchedRoutes = false)
         {
+            server.WithAttributeRouting(svcProvider, new ServerEventProvider(server), allowUnmatchedRoutes);
+        }
+
+        public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, IPublishEventProvider publishEventProvider, bool allowUnmatchedRoutes = false)
+        {
             var router = svcProvider.GetRequiredService<MqttRouter>();
             router.Server = server;
             IRouteInvocationInterceptor? interceptor = svcProvider.GetService<IRouteInvocationInterceptor>();
-            IPublishEventProvider publishEvenProvider = svcProvider.GetService<IPublishEventProvider>() ?? new ServerEventProvider(server);
 
-            publishEvenProvider.OnPublishAsync += async (args) =>
+            publishEventProvider.OnPublishAsync += async (args) =>
             {
                 object correlationObject = null;
                 if (interceptor != null)
