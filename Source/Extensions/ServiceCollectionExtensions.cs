@@ -96,11 +96,23 @@ namespace MQTTnet.AspNetCore.Routing
 
         public static IApplicationBuilder UseAttributeRouting(this IApplicationBuilder app, bool allowUnmatchedRoutes = false)
         {
-            var router = app.ApplicationServices.GetRequiredService<MqttRouter>();
             var server = app.ApplicationServices.GetRequiredService<MqttServer>();
+            server.WithAttributeRouting(app.ApplicationServices, allowUnmatchedRoutes);
+            return app;
+        }
+
+        public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, bool allowUnmatchedRoutes = false)
+        {
+            server.WithAttributeRouting(svcProvider, new ServerEventProvider(server), allowUnmatchedRoutes);
+        }
+
+        public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, IPublishEventProvider publishEventProvider, bool allowUnmatchedRoutes = false)
+        {
+            var router = svcProvider.GetRequiredService<MqttRouter>();
             router.Server = server;
-            var interceptor = app.ApplicationServices.GetService<IRouteInvocationInterceptor>();
-            server.InterceptingPublishAsync += async (args) =>
+            IRouteInvocationInterceptor? interceptor = svcProvider.GetService<IRouteInvocationInterceptor>();
+
+            publishEventProvider.OnPublishAsync += async (args) =>
             {
                 object correlationObject = null;
                 if (interceptor != null)
@@ -110,46 +122,12 @@ namespace MQTTnet.AspNetCore.Routing
 
                 try
                 {
-                    await router.OnIncomingApplicationMessage(app.ApplicationServices, args, allowUnmatchedRoutes);
-
-                    if (interceptor != null)
-                    {
-                        await interceptor.RouteExecuted(correlationObject, args, null);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (interceptor != null)
-                    {
-                        await interceptor.RouteExecuted(correlationObject, args, ex);
-                    }
-                    throw;
-                }
-            };
-            return app;
-        }
-
-        public static void WithAttributeRouting(this MqttServer server, IServiceProvider svcProvider, bool allowUnmatchedRoutes = false)
-        {
-            var router = svcProvider.GetRequiredService<MqttRouter>();
-            router.Server = server;
-            var interceptor = svcProvider.GetService<IRouteInvocationInterceptor>();
-            server.InterceptingPublishAsync += async (args) =>
-            {
-                object correlationObject = null;
-                if (interceptor != null)
-                {
-                    correlationObject = await interceptor.RouteExecuting( args );
-                }
-
-                try
-                {
                     await router.OnIncomingApplicationMessage(svcProvider, args, allowUnmatchedRoutes);
                     if (interceptor != null)
                     {
                         await interceptor.RouteExecuted(correlationObject, args, null);
                     }
-                } 
+                }
                 catch (Exception ex)
                 {
                     if (interceptor != null)
